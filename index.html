@@ -1,0 +1,160 @@
+<!DOCTYPE>
+<html>
+
+<head>
+  <title>
+    <PIG GAME>
+  </title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+  <head>
+    <style>
+      .active {
+        background-color: #53FFFA;
+      }
+
+      .red {
+        background-color: #C6FF53;
+      }
+
+      .mid {
+        text-align: center;
+      }
+    </style>
+
+  <body>
+    <div id="pic"></div>
+
+    <div class="container">
+      <div id="roll" onclick="rollClick()">Click to Start Game</div>
+      <button onclick="upload()" id="add">Add </button>
+      <div class="row mid red" style="height:80%">
+        <div class="col-md-6 active ">
+          <div id="playerName1">Player 1</div>
+          <div id="player0PermScore"> 0 </div><br>
+
+          Current
+          <div id="player0TempScore"> 0 </div><br>
+
+          Total Wins
+          <div id="player0Win"> 0 </div><br>
+
+        </div>
+        <div class="col-md-6 ">
+          <div id="playerName2">Player 2</div>
+          <div id="player1PermScore"> 0 </div><br>
+          Current
+          <div id="player1TempScore"> 0 </div><br>
+
+          Total Wins
+          <div id="player1Win"> 0 </div><br>
+
+        </div>
+      </div>
+
+    </div>
+
+  </body>
+  <script>
+    let player = 0; noOfPlayers = 0, tempScore = 0, playerCurrentScore = [], playerFinalScore = [], playerName = ["Player 1", "Player 2"], winner = 0, winLimit = 50, record = [0, 0];
+    let a = prompt("Name of Player 1");
+    a == "" ? true : playerName[0] = a;
+    let b = prompt("Name of Player 2");
+    b == "" ? true : playerName[1] = b;
+
+    init();
+    function init() {
+      player = 0;
+      playerCurrentScore = [0, 0];
+      playerFinalScore = [0, 0];
+      document.getElementById("roll").innerText = "Click to Start Game";
+      document.getElementById("player" + "0" + "TempScore").innerText = 0;
+      document.getElementById("player" + "1" + "TempScore").innerText = 0;
+      document.getElementById("player" + "0" + "PermScore").innerText = 0;
+      document.getElementById("player" + "1" + "PermScore").innerText = 0;
+      document.getElementById("playerName1").innerText = playerName[0];
+      document.getElementById("playerName2").innerText = playerName[1];
+      document.getElementById("player0Win").innerText = record[0];
+      document.getElementById("player1Win").innerText = record[1];
+      document.getElementById("add").style.display = "none";
+    }
+    show();
+
+    function rollClick() {
+      // generate random no
+      let random = Math.floor(Math.random() * 6) + 1;
+      // roll dice
+      rollDice(random);
+
+      document.getElementById("add").style.display = "block";
+      if (random != 1)
+        update(player, random);
+      else {
+        document.getElementById("player" + player + "TempScore").innerText = 0;
+        playerCurrentScore[player] = 0;
+        player = (player == 1) ? (player = 0) : (player = 1);
+      }
+    }
+
+    function update(player, num) {
+      playerCurrentScore[player] += num;
+      document.getElementById("player" + player + "TempScore").innerText = playerCurrentScore[player];
+      // change player temp score ,summation till dice ==1 ,    
+      // then perm score  change temp score=0
+      // change player
+    }
+    function upload() {
+      playerFinalScore[player] = playerCurrentScore[player] + playerFinalScore[player];
+      document.getElementById("player" + player + "PermScore").innerText = playerFinalScore[player];
+
+      playerCurrentScore[player] = 0;
+
+      document.getElementById("player" + player + "TempScore").innerText = 0;
+      checkWin();
+      player = (player == 1) ? (player = 0) : (player = 1);
+    }
+
+    function rollDice(num) {
+      switch (num) {
+        case 1:
+          document.getElementById("roll").innerHTML = '<i class="fas fa-dice-one" style="font-size:48px; color:red"></i>';
+          break;
+        case 2:
+          document.getElementById("roll").innerHTML = '<i class="fas fa-dice-two" style="font-size:48px; color:red"></i>';
+          break;
+        case 3:
+          document.getElementById("roll").innerHTML = '<i class="fas fa-dice-three" style="font-size:48px; color:red"></i>';
+          break;
+        case 4:
+          document.getElementById("roll").innerHTML = '<i class="fas fa-dice-four" style="font-size:48px; color:red"></i>';
+          break;
+        case 5:
+          document.getElementById("roll").innerHTML = '<i class="fas fa-dice-five" style="font-size:48px; color:red"></i>';
+          break;
+        default:
+          document.getElementById("roll").innerHTML = '<i class="fas fa-dice-six" style="font-size:48px; color:red"></i>';
+      }
+    }
+
+    function checkWin() {
+      show();
+      let newGame = false;
+      if (playerFinalScore[player] >= winLimit) {
+        alert(playerName[player] + " wins");
+        newGame = true;
+      }
+      if (newGame) {
+        record[player]++;
+        init();
+      }
+    }
+
+    function show() {
+      console.log("winLimit", winLimit);
+      console.log("playerFinalScore", playerFinalScore);
+      console.log("playerTEMPScore:", playerCurrentScore);
+      console.log("record:", record);
+    }
+  </script>
+</html>
